@@ -16,9 +16,11 @@ import fr.aurel943.staffgui.menus.PlayerActionMenu;
 import fr.aurel943.staffgui.menus.PlayerListMenu;
 import fr.aurel943.staffgui.menus.RankActionMenu;
 import fr.aurel943.staffgui.menus.RankPlayerListMenu;
+import fr.aurel943.staffgui.menus.ToolsMenu;
 import fr.aurel943.staffgui.messages.MessagesManager;
 import fr.aurel943.staffgui.moderation.FreezeManager;
 import fr.aurel943.staffgui.moderation.MuteManager;
+import fr.aurel943.staffgui.moderation.PendingBroadcastManager;
 import fr.aurel943.staffgui.moderation.PendingEconomyManager;
 import fr.aurel943.staffgui.moderation.PendingKickManager;
 import fr.aurel943.staffgui.moderation.VanishManager;
@@ -36,6 +38,7 @@ public class StaffGUI extends JavaPlugin {
     private MuteManager muteManager;
     private PendingKickManager pendingKickManager;
     private PendingEconomyManager pendingEconomyManager;
+    private PendingBroadcastManager pendingBroadcastManager;
 
     private MainMenu mainMenu;
     private PlayerListMenu playerListMenu;
@@ -45,6 +48,7 @@ public class StaffGUI extends JavaPlugin {
     private EconomyActionMenu economyActionMenu;
     private RankPlayerListMenu rankPlayerListMenu;
     private RankActionMenu rankActionMenu;
+    private ToolsMenu toolsMenu;
 
     @Override
     public void onEnable() {
@@ -67,6 +71,7 @@ public class StaffGUI extends JavaPlugin {
         muteManager = new MuteManager(database);
         pendingKickManager = new PendingKickManager();
         pendingEconomyManager = new PendingEconomyManager();
+        pendingBroadcastManager = new PendingBroadcastManager();
 
         mainMenu = new MainMenu(this);
         playerListMenu = new PlayerListMenu(this);
@@ -76,6 +81,7 @@ public class StaffGUI extends JavaPlugin {
         economyActionMenu = new EconomyActionMenu(this, pendingEconomyManager);
         rankPlayerListMenu = new RankPlayerListMenu(this);
         rankActionMenu = new RankActionMenu(this);
+        toolsMenu = new ToolsMenu(this, vanishManager, pendingBroadcastManager);
 
         getServer().getPluginManager().registerEvents(mainMenu, this);
         getServer().getPluginManager().registerEvents(playerListMenu, this);
@@ -85,9 +91,10 @@ public class StaffGUI extends JavaPlugin {
         getServer().getPluginManager().registerEvents(economyActionMenu, this);
         getServer().getPluginManager().registerEvents(rankPlayerListMenu, this);
         getServer().getPluginManager().registerEvents(rankActionMenu, this);
+        getServer().getPluginManager().registerEvents(toolsMenu, this);
         getServer().getPluginManager().registerEvents(new MovementFreezeListener(freezeManager), this);
         getServer().getPluginManager().registerEvents(
-                new ChatModerationListener(this, muteManager, pendingKickManager, pendingEconomyManager), this);
+                new ChatModerationListener(this, muteManager, pendingKickManager, pendingEconomyManager, pendingBroadcastManager), this);
         getServer().getPluginManager().registerEvents(new VanishJoinListener(this, vanishManager), this);
 
         getCommand("staff").setExecutor(new StaffCommand(this));
@@ -122,4 +129,5 @@ public class StaffGUI extends JavaPlugin {
     public EconomyActionMenu getEconomyActionMenu() { return economyActionMenu; }
     public RankPlayerListMenu getRankPlayerListMenu() { return rankPlayerListMenu; }
     public RankActionMenu getRankActionMenu() { return rankActionMenu; }
+    public ToolsMenu getToolsMenu() { return toolsMenu; }
 }

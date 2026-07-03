@@ -103,10 +103,7 @@ public class MainMenu implements Listener {
                 }
                 plugin.getRankPlayerListMenu().open(player);
             }
-            case SLOT_OUTILS ->
-                    player.sendMessage(colored("&7[StaffGUI] Menu Outils — arrive au Lot 5."));
-            case SLOT_FERMER -> player.closeInventory();
-            default -> { /* rien */ }
+            case SLOT_OUTILS -> plugin.getToolsMenu().open(player);
         }
     }
 

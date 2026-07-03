@@ -139,3 +139,30 @@ rank-action-menu:
   rank-deja-actif: "&a&l✓ Rank actuel"
   rank-cliquer-assigner: "&eClique pour assigner ce rank"
   assignation-confirme: "&aLe rank de {joueur} a été défini sur {rank}."
+
+tools-menu:
+  titre: "&8&lStaffGUI - Outils serveur"
+  permission-refusee: "&cTu n'as pas la permission pour cette action."
+
+  vanish-self-actif: "&f&lVanish perso : Actif"
+  vanish-self-inactif: "&7&lVanish perso : Inactif"
+  vanish-self-lore: "&7Te rend invisible aux joueurs normaux."
+  vanish-self-confirme-actif: "&aTu es maintenant invisible."
+  vanish-self-confirme-inactif: "&aTu es de nouveau visible."
+
+  broadcast: "&e&lBroadcast"
+  broadcast-lore: "&7Diffuse un message à tout le serveur."
+  broadcast-demande-message: "&eTape le message à diffuser dans le chat."
+  broadcast-format: "&6&l[Annonce] &f{message}"
+
+  reload: "&b&lReload"
+  reload-lore: "&7Recharge messages.yml à chaud."
+  reload-confirme: "&a&l✓ &amessages.yml rechargé."
+
+  setspawn: "&d&lSetspawn"
+  setspawn-lore: "&7Définit le spawn du monde actuel à ta position."
+  setspawn-confirme: "&aSpawn du monde {monde} mis à jour."
+
+  serverinfo: "&6&lInfos serveur"
+  serverinfo-lore: "&7TPS, joueurs en ligne, uptime."
+  serverinfo-affichage: "&6&l★ Infos serveur &7— &fTPS: &a{tps} &7| &fJoueurs: &a{en-ligne}/{max} &7| &fUptime: &a{uptime}"

@@ -7,6 +7,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import fr.aurel943.staffgui.StaffGUI;
 import fr.aurel943.staffgui.messages.MessagesManager;
 import fr.aurel943.staffgui.moderation.MuteManager;
+import fr.aurel943.staffgui.moderation.PendingBroadcastManager;
 import fr.aurel943.staffgui.moderation.PendingEconomyAction;
 import fr.aurel943.staffgui.moderation.PendingEconomyManager;
 import fr.aurel943.staffgui.moderation.PendingKickManager;
@@ -15,10 +16,11 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Un seul listener de chat pour trois besoins, vérifiés dans cet ordre :
+ * Un seul listener de chat pour quatre besoins, vérifiés dans cet ordre :
  *   1) Kick en attente de raison (Lot 2)
  *   2) Action économie en attente de montant (Lot 3)
- *   3) Sinon, si l'expéditeur est mute, on annule son message (Lot 2)
+ *   3) Broadcast en attente de message (Lot 5)
+ *   4) Sinon, si l'expéditeur est mute, on annule son message (Lot 2)
  */
 public class ChatModerationListener implements Listener {
 
@@ -26,15 +28,18 @@ public class ChatModerationListener implements Listener {
     private final MuteManager muteManager;
     private final PendingKickManager pendingKickManager;
     private final PendingEconomyManager pendingEconomyManager;
+    private final PendingBroadcastManager pendingBroadcastManager;
     private final MessagesManager messages;
 
     public ChatModerationListener(StaffGUI plugin, MuteManager muteManager,
                                   PendingKickManager pendingKickManager,
-                                  PendingEconomyManager pendingEconomyManager) {
+                                  PendingEconomyManager pendingEconomyManager,
+                                  PendingBroadcastManager pendingBroadcastManager) {
         this.plugin = plugin;
         this.muteManager = muteManager;
         this.pendingKickManager = pendingKickManager;
         this.pendingEconomyManager = pendingEconomyManager;
+        this.pendingBroadcastManager = pendingBroadcastManager;
         this.messages = plugin.getMessagesManager();
     }
 
@@ -52,6 +57,13 @@ public class ChatModerationListener implements Listener {
         if (pendingEconomyManager.hasPending(uuid)) {
             event.setCancelled(true);
             handleEconomyAmount(player, pendingEconomyManager.consume(uuid), event.getMessage());
+            return;
+        }
+
+        if (pendingBroadcastManager.hasPending(uuid)) {
+            event.setCancelled(true);
+            pendingBroadcastManager.consume(uuid);
+            handleBroadcastMessage(player, event.getMessage());
             return;
         }
 
@@ -115,6 +127,14 @@ public class ChatModerationListener implements Listener {
                             Map.of("montant", String.valueOf(montant), "joueur", nomCible));
                 }
             }
+        });
+    }
+
+    private void handleBroadcastMessage(Player admin, String message) {
+        org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> {
+            String formatted = org.bukkit.ChatColor.translateAlternateColorCodes('&',
+                    messages.get("tools-menu.broadcast-format").replace("{message}", message));
+            org.bukkit.Bukkit.broadcastMessage(formatted);
         });
     }
 }
