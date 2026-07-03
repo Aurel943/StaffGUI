@@ -1,0 +1,17 @@
+commande:
+  joueur-requis: "&cCette commande doit être exécutée par un joueur."
+  permission-refusee: "&cTu n'as pas la permission d'utiliser cette commande."
+
+main-menu:
+  titre: "&8&lStaffGUI"
+  bouton-joueurs: "&e&lJoueurs"
+  bouton-joueurs-lore: "&7Liste des joueurs en ligne et actions de modération."
+  bouton-economie: "&a&lÉconomie"
+  bouton-economie-lore: "&7Voir/gérer les Cristaux d'un joueur."
+  bouton-ranks: "&b&lRanks"
+  bouton-ranks-lore: "&7Voir/changer le rank d'un joueur."
+  bouton-outils: "&6&lOutils serveur"
+  bouton-outils-lore: "&7Broadcast, reload, setspawn, infos serveur."
+  bouton-fermer: "&c&lFermer"
+  module-indisponible: "&8(indisponible — Hub non détecté)"
+  module-indisponible-message: "&cCe module nécessite le plugin Hub sur ce serveur."

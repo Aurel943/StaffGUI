@@ -1,0 +1,104 @@
+name: StaffGUI
+version: '1.0'
+main: fr.aurel943.staffgui.StaffGUI
+api-version: '1.21'
+author: Aurelien
+description: GUI centralisé de modération/administration
+softdepend: [Hub]
+
+commands:
+  staff:
+    description: Ouvre le menu d'administration/modération.
+    usage: /staff
+    permission: staffgui.use
+
+permissions:
+  staffgui.*:
+    description: Donne accès à absolument toutes les fonctionnalités de StaffGUI.
+    default: op
+    children:
+      staffgui.use: true
+      staffgui.players.teleport: true
+      staffgui.players.gamemode: true
+      staffgui.players.heal: true
+      staffgui.players.freeze: true
+      staffgui.players.vanish: true
+      staffgui.players.invsee: true
+      staffgui.players.clear: true
+      staffgui.players.kick: true
+      staffgui.players.mute: true
+      staffgui.economy.view: true
+      staffgui.economy.edit: true
+      staffgui.economy.reset: true
+      staffgui.ranks.view: true
+      staffgui.ranks.edit: true
+      staffgui.tools.vanish-self: true
+      staffgui.tools.broadcast: true
+      staffgui.tools.reload: true
+      staffgui.tools.setspawn: true
+      staffgui.tools.serverinfo: true
+
+  staffgui.use:
+    description: Ouvrir le menu principal StaffGUI (/staff)
+    default: false
+
+  staffgui.players.teleport:
+    description: Se téléporter à un joueur / le faire venir (menu Joueurs)
+    default: false
+  staffgui.players.gamemode:
+    description: Changer le gamemode d'un joueur (menu Joueurs)
+    default: false
+  staffgui.players.heal:
+    description: Heal/feed un joueur (menu Joueurs)
+    default: false
+  staffgui.players.freeze:
+    description: Freeze/unfreeze un joueur (menu Joueurs)
+    default: false
+  staffgui.players.vanish:
+    description: Vanish/unvanish un autre joueur (menu Joueurs)
+    default: false
+  staffgui.players.invsee:
+    description: Voir l'inventaire d'un joueur (menu Joueurs) — accès sensible
+    default: false
+  staffgui.players.clear:
+    description: Vider l'inventaire d'un joueur (menu Joueurs) — destructif
+    default: false
+  staffgui.players.kick:
+    description: Kick un joueur (menu Joueurs)
+    default: false
+  staffgui.players.mute:
+    description: Mute/unmute un joueur (menu Joueurs)
+    default: false
+
+  staffgui.economy.view:
+    description: Voir le solde Cristaux d'un joueur (menu Économie)
+    default: false
+  staffgui.economy.edit:
+    description: Give/take/set des Cristaux à un joueur (menu Économie)
+    default: false
+  staffgui.economy.reset:
+    description: Réinitialiser l'économie entière du serveur — destructif
+    default: false
+
+  staffgui.ranks.view:
+    description: Voir le rank d'un joueur (menu Ranks)
+    default: false
+  staffgui.ranks.edit:
+    description: Changer le rank d'un joueur — sensible, permet l'auto-promotion
+    default: false
+
+  staffgui.tools.vanish-self:
+    description: Se rendre soi-même invisible (menu Outils)
+    default: false
+  staffgui.tools.broadcast:
+    description: Diffuser un message à tout le serveur (menu Outils)
+    default: false
+  staffgui.tools.reload:
+    description: Recharger le plugin de ce serveur depuis le menu Outils
+    default: false
+  staffgui.tools.setspawn:
+    description: Définir le spawn depuis le menu Outils
+    default: false
+  staffgui.tools.serverinfo:
+    description: Voir TPS/joueurs en ligne/uptime (menu Outils)
+    default: false
