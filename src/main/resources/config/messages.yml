@@ -15,3 +15,70 @@ main-menu:
   bouton-fermer: "&c&lFermer"
   module-indisponible: "&8(indisponible — Hub non détecté)"
   module-indisponible-message: "&cCe module nécessite le plugin Hub sur ce serveur."
+
+chat:
+  mute-actif: "&cTu es actuellement mute, ton message n'a pas été envoyé."
+
+player-list-menu:
+  titre: "&8&lStaffGUI - Joueurs en ligne"
+  retour: "&7&lMenu précédent"
+  joueur-deconnecte: "&cCe joueur s'est déconnecté entre-temps."
+
+player-action-menu:
+  titre-prefixe: "&8&lStaffGUI - "
+  retour: "&7&lRetour à la liste"
+  cible-deconnectee: "&cCe joueur s'est déconnecté."
+  permission-refusee: "&cTu n'as pas la permission pour cette action."
+
+  tp-vers: "&b&lSe téléporter à lui"
+  tp-vers-lore: "&7Clique pour te téléporter vers ce joueur."
+  tp-vers-confirme: "&aTéléporté vers {joueur}."
+
+  faire-venir: "&b&lLe faire venir à moi"
+  faire-venir-lore: "&7Clique pour téléporter ce joueur jusqu'à toi."
+  faire-venir-confirme: "&a{joueur} a été téléporté jusqu'à toi."
+  faire-venir-cible: "&7Un admin ({admin}) t'a téléporté."
+
+  gamemode: "&a&lChanger le gamemode"
+  gamemode-lore: "&7Mode actuel : &e{mode}&7. Clique pour passer au suivant."
+  gamemode-confirme: "&aGamemode de {joueur} changé en {mode}."
+
+  heal: "&d&lHeal / Feed"
+  heal-lore: "&7Restaure vie et faim au maximum."
+  heal-confirme: "&a{joueur} a été soigné."
+
+  freeze-actif: "&b&lFreeze : Actif"
+  freeze-inactif: "&7&lFreeze : Inactif"
+  freeze-lore: "&7Clique pour activer/désactiver le freeze."
+  freeze-confirme-actif: "&a{joueur} est maintenant freeze."
+  freeze-confirme-inactif: "&a{joueur} n'est plus freeze."
+  freeze-subi-actif: "&cUn admin t'a freeze — tu ne peux plus bouger."
+  freeze-subi-inactif: "&aTu n'es plus freeze."
+
+  vanish-actif: "&f&lVanish : Actif"
+  vanish-inactif: "&7&lVanish : Inactif"
+  vanish-lore: "&7Clique pour rendre ce joueur invisible/visible."
+  vanish-confirme-actif: "&a{joueur} est maintenant invisible aux autres joueurs."
+  vanish-confirme-inactif: "&a{joueur} est de nouveau visible."
+
+  invsee: "&6&lVoir son inventaire"
+  invsee-lore: "&7Ouvre son inventaire (lecture/édition en direct)."
+
+  clear: "&4&lVider son inventaire"
+  clear-lore: "&cAction irréversible."
+  clear-confirme: "&aL'inventaire de {joueur} a été vidé."
+  clear-subi: "&cUn admin ({admin}) a vidé ton inventaire."
+
+  kick:
+    bouton: "&4&lKick"
+    bouton-lore: "&7Clique, puis tape la raison dans le chat."
+    demande-raison: "&eTape la raison du kick de {joueur} dans le chat."
+    confirme: "&a{joueur} a été kick (raison : {raison})."
+    cible-deconnectee: "&cCe joueur s'est déconnecté avant que tu ne valides le kick."
+
+  mute-actif: "&c&lMute : Actif"
+  mute-inactif: "&7&lMute : Inactif"
+  mute-lore: "&7Clique pour mute/unmute ce joueur (persistant)."
+  mute-confirme-actif: "&a{joueur} est maintenant mute."
+  mute-confirme-inactif: "&a{joueur} n'est plus mute."
+  mute-subi: "&cUn admin t'a mute."

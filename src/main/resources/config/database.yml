@@ -1,0 +1,12 @@
+mysql:
+  host: "127.0.0.1"
+  port: 3306
+  database: "plugin2_db"
+  utilisateur: "root"
+  mot-de-passe: ""
+  pool:
+    taille-max: 5
+    taille-min-idle: 1
+    timeout-connexion-ms: 10000
+    timeout-idle-ms: 600000
+    duree-vie-max-ms: 1800000

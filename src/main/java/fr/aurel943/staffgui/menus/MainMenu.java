@@ -88,7 +88,7 @@ public class MainMenu implements Listener {
 
         switch (slot) {
             case SLOT_JOUEURS ->
-                    player.sendMessage(colored("&7[StaffGUI] Menu Joueurs — arrive au Lot 2."));
+                    plugin.getPlayerListMenu().open(player);
             case SLOT_ECONOMIE -> {
                 if (!plugin.isHubAvailable()) {
                     messages.send(player, "main-menu.module-indisponible-message");

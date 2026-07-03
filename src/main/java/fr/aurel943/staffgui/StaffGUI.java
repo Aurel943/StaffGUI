@@ -4,8 +4,18 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import fr.aurel943.hub.Hub;
 import fr.aurel943.staffgui.commands.StaffCommand;
+import fr.aurel943.staffgui.database.StaffGUIDatabase;
+import fr.aurel943.staffgui.listeners.ChatModerationListener;
+import fr.aurel943.staffgui.listeners.MovementFreezeListener;
+import fr.aurel943.staffgui.listeners.VanishJoinListener;
 import fr.aurel943.staffgui.menus.MainMenu;
+import fr.aurel943.staffgui.menus.PlayerActionMenu;
+import fr.aurel943.staffgui.menus.PlayerListMenu;
 import fr.aurel943.staffgui.messages.MessagesManager;
+import fr.aurel943.staffgui.moderation.FreezeManager;
+import fr.aurel943.staffgui.moderation.MuteManager;
+import fr.aurel943.staffgui.moderation.PendingKickManager;
+import fr.aurel943.staffgui.moderation.VanishManager;
 
 import java.io.File;
 
@@ -13,16 +23,22 @@ public class StaffGUI extends JavaPlugin {
 
     private Hub hubPlugin;
     private MessagesManager messagesManager;
+
+    private StaffGUIDatabase database;
+    private FreezeManager freezeManager;
+    private VanishManager vanishManager;
+    private MuteManager muteManager;
+    private PendingKickManager pendingKickManager;
+
     private MainMenu mainMenu;
+    private PlayerListMenu playerListMenu;
+    private PlayerActionMenu playerActionMenu;
 
     @Override
     public void onEnable() {
         saveDefaultResourceIfMissing("config/messages.yml");
         messagesManager = new MessagesManager(this);
 
-        // softdepend garantit que Hub est déjà chargé à ce stade s'il est présent
-        // sur ce serveur. StaffGUI reste utilisable sans lui (menu Joueurs/Outils
-        // fonctionnent quand même), mais Économie/Ranks se désactivent proprement.
         Plugin found = getServer().getPluginManager().getPlugin("Hub");
         if (found instanceof Hub hub) {
             hubPlugin = hub;
@@ -31,8 +47,24 @@ public class StaffGUI extends JavaPlugin {
             getLogger().warning("Hub introuvable sur ce serveur — modules Économie et Ranks désactivés.");
         }
 
+        database = new StaffGUIDatabase(getDataFolder(), getLogger());
+        database.connect(this);
+
+        freezeManager = new FreezeManager();
+        vanishManager = new VanishManager();
+        muteManager = new MuteManager(database);
+        pendingKickManager = new PendingKickManager();
+
         mainMenu = new MainMenu(this);
+        playerListMenu = new PlayerListMenu(this);
+        playerActionMenu = new PlayerActionMenu(this, freezeManager, vanishManager, muteManager, pendingKickManager);
+
         getServer().getPluginManager().registerEvents(mainMenu, this);
+        getServer().getPluginManager().registerEvents(playerListMenu, this);
+        getServer().getPluginManager().registerEvents(playerActionMenu, this);
+        getServer().getPluginManager().registerEvents(new MovementFreezeListener(freezeManager), this);
+        getServer().getPluginManager().registerEvents(new ChatModerationListener(this, muteManager, pendingKickManager), this);
+        getServer().getPluginManager().registerEvents(new VanishJoinListener(this, vanishManager), this);
 
         getCommand("staff").setExecutor(new StaffCommand(this));
 
@@ -41,6 +73,9 @@ public class StaffGUI extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        if (database != null) {
+            database.disconnect();
+        }
         getLogger().info("StaffGUI désactivé.");
     }
 
@@ -52,10 +87,10 @@ public class StaffGUI extends JavaPlugin {
     }
 
     public Hub getHubPlugin() { return hubPlugin; }
-
     public boolean isHubAvailable() { return hubPlugin != null; }
-
     public MessagesManager getMessagesManager() { return messagesManager; }
 
     public MainMenu getMainMenu() { return mainMenu; }
+    public PlayerListMenu getPlayerListMenu() { return playerListMenu; }
+    public PlayerActionMenu getPlayerActionMenu() { return playerActionMenu; }
 }
