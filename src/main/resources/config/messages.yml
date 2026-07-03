@@ -122,3 +122,20 @@ economy-action-menu:
   set: "&b&lDéfinir (set)"
   set-lore: "&7Écrase le solde actuel avec cette valeur."
   set-confirme: "&aSolde de {joueur} défini à {montant} cristaux."
+
+rank-player-list-menu:
+  titre: "&8&lStaffGUI - Ranks - Joueurs"
+  retour: "&7&lMenu précédent"
+  joueur-deconnecte: "&cCe joueur s'est déconnecté entre-temps."
+
+rank-action-menu:
+  titre-prefixe: "&8&lStaffGUI - Ranks - "
+  retour: "&7&lRetour à la liste"
+  cible-deconnectee: "&cCe joueur s'est déconnecté."
+  permission-refusee: "&cTu n'as pas la permission pour cette action."
+  rank-actuel-lore: "&7Rank actuel : &b{rank}"
+  rank-poids-lore: "&7Poids : &f{poids}"
+  rank-permissions-lore: "&7Permissions : &f{nb}"
+  rank-deja-actif: "&a&l✓ Rank actuel"
+  rank-cliquer-assigner: "&eClique pour assigner ce rank"
+  assignation-confirme: "&aLe rank de {joueur} a été défini sur {rank}."

@@ -14,6 +14,8 @@ import fr.aurel943.staffgui.menus.EconomyPlayerListMenu;
 import fr.aurel943.staffgui.menus.MainMenu;
 import fr.aurel943.staffgui.menus.PlayerActionMenu;
 import fr.aurel943.staffgui.menus.PlayerListMenu;
+import fr.aurel943.staffgui.menus.RankActionMenu;
+import fr.aurel943.staffgui.menus.RankPlayerListMenu;
 import fr.aurel943.staffgui.messages.MessagesManager;
 import fr.aurel943.staffgui.moderation.FreezeManager;
 import fr.aurel943.staffgui.moderation.MuteManager;
@@ -41,6 +43,8 @@ public class StaffGUI extends JavaPlugin {
     private EconomyMenu economyMenu;
     private EconomyPlayerListMenu economyPlayerListMenu;
     private EconomyActionMenu economyActionMenu;
+    private RankPlayerListMenu rankPlayerListMenu;
+    private RankActionMenu rankActionMenu;
 
     @Override
     public void onEnable() {
@@ -70,6 +74,8 @@ public class StaffGUI extends JavaPlugin {
         economyMenu = new EconomyMenu(this);
         economyPlayerListMenu = new EconomyPlayerListMenu(this);
         economyActionMenu = new EconomyActionMenu(this, pendingEconomyManager);
+        rankPlayerListMenu = new RankPlayerListMenu(this);
+        rankActionMenu = new RankActionMenu(this);
 
         getServer().getPluginManager().registerEvents(mainMenu, this);
         getServer().getPluginManager().registerEvents(playerListMenu, this);
@@ -77,6 +83,8 @@ public class StaffGUI extends JavaPlugin {
         getServer().getPluginManager().registerEvents(economyMenu, this);
         getServer().getPluginManager().registerEvents(economyPlayerListMenu, this);
         getServer().getPluginManager().registerEvents(economyActionMenu, this);
+        getServer().getPluginManager().registerEvents(rankPlayerListMenu, this);
+        getServer().getPluginManager().registerEvents(rankActionMenu, this);
         getServer().getPluginManager().registerEvents(new MovementFreezeListener(freezeManager), this);
         getServer().getPluginManager().registerEvents(
                 new ChatModerationListener(this, muteManager, pendingKickManager, pendingEconomyManager), this);
@@ -112,4 +120,6 @@ public class StaffGUI extends JavaPlugin {
     public EconomyMenu getEconomyMenu() { return economyMenu; }
     public EconomyPlayerListMenu getEconomyPlayerListMenu() { return economyPlayerListMenu; }
     public EconomyActionMenu getEconomyActionMenu() { return economyActionMenu; }
+    public RankPlayerListMenu getRankPlayerListMenu() { return rankPlayerListMenu; }
+    public RankActionMenu getRankActionMenu() { return rankActionMenu; }
 }

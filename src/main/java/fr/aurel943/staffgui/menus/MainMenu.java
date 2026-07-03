@@ -101,7 +101,7 @@ public class MainMenu implements Listener {
                     messages.send(player, "main-menu.module-indisponible-message");
                     return;
                 }
-                player.sendMessage(colored("&7[StaffGUI] Menu Ranks — arrive au Lot 4."));
+                plugin.getRankPlayerListMenu().open(player);
             }
             case SLOT_OUTILS ->
                     player.sendMessage(colored("&7[StaffGUI] Menu Outils — arrive au Lot 5."));
