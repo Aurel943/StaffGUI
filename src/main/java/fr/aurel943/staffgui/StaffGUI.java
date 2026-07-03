@@ -8,12 +8,16 @@ import fr.aurel943.staffgui.database.StaffGUIDatabase;
 import fr.aurel943.staffgui.listeners.ChatModerationListener;
 import fr.aurel943.staffgui.listeners.MovementFreezeListener;
 import fr.aurel943.staffgui.listeners.VanishJoinListener;
+import fr.aurel943.staffgui.menus.EconomyActionMenu;
+import fr.aurel943.staffgui.menus.EconomyMenu;
+import fr.aurel943.staffgui.menus.EconomyPlayerListMenu;
 import fr.aurel943.staffgui.menus.MainMenu;
 import fr.aurel943.staffgui.menus.PlayerActionMenu;
 import fr.aurel943.staffgui.menus.PlayerListMenu;
 import fr.aurel943.staffgui.messages.MessagesManager;
 import fr.aurel943.staffgui.moderation.FreezeManager;
 import fr.aurel943.staffgui.moderation.MuteManager;
+import fr.aurel943.staffgui.moderation.PendingEconomyManager;
 import fr.aurel943.staffgui.moderation.PendingKickManager;
 import fr.aurel943.staffgui.moderation.VanishManager;
 
@@ -29,10 +33,14 @@ public class StaffGUI extends JavaPlugin {
     private VanishManager vanishManager;
     private MuteManager muteManager;
     private PendingKickManager pendingKickManager;
+    private PendingEconomyManager pendingEconomyManager;
 
     private MainMenu mainMenu;
     private PlayerListMenu playerListMenu;
     private PlayerActionMenu playerActionMenu;
+    private EconomyMenu economyMenu;
+    private EconomyPlayerListMenu economyPlayerListMenu;
+    private EconomyActionMenu economyActionMenu;
 
     @Override
     public void onEnable() {
@@ -54,16 +62,24 @@ public class StaffGUI extends JavaPlugin {
         vanishManager = new VanishManager();
         muteManager = new MuteManager(database);
         pendingKickManager = new PendingKickManager();
+        pendingEconomyManager = new PendingEconomyManager();
 
         mainMenu = new MainMenu(this);
         playerListMenu = new PlayerListMenu(this);
         playerActionMenu = new PlayerActionMenu(this, freezeManager, vanishManager, muteManager, pendingKickManager);
+        economyMenu = new EconomyMenu(this);
+        economyPlayerListMenu = new EconomyPlayerListMenu(this);
+        economyActionMenu = new EconomyActionMenu(this, pendingEconomyManager);
 
         getServer().getPluginManager().registerEvents(mainMenu, this);
         getServer().getPluginManager().registerEvents(playerListMenu, this);
         getServer().getPluginManager().registerEvents(playerActionMenu, this);
+        getServer().getPluginManager().registerEvents(economyMenu, this);
+        getServer().getPluginManager().registerEvents(economyPlayerListMenu, this);
+        getServer().getPluginManager().registerEvents(economyActionMenu, this);
         getServer().getPluginManager().registerEvents(new MovementFreezeListener(freezeManager), this);
-        getServer().getPluginManager().registerEvents(new ChatModerationListener(this, muteManager, pendingKickManager), this);
+        getServer().getPluginManager().registerEvents(
+                new ChatModerationListener(this, muteManager, pendingKickManager, pendingEconomyManager), this);
         getServer().getPluginManager().registerEvents(new VanishJoinListener(this, vanishManager), this);
 
         getCommand("staff").setExecutor(new StaffCommand(this));
@@ -93,4 +109,7 @@ public class StaffGUI extends JavaPlugin {
     public MainMenu getMainMenu() { return mainMenu; }
     public PlayerListMenu getPlayerListMenu() { return playerListMenu; }
     public PlayerActionMenu getPlayerActionMenu() { return playerActionMenu; }
+    public EconomyMenu getEconomyMenu() { return economyMenu; }
+    public EconomyPlayerListMenu getEconomyPlayerListMenu() { return economyPlayerListMenu; }
+    public EconomyActionMenu getEconomyActionMenu() { return economyActionMenu; }
 }

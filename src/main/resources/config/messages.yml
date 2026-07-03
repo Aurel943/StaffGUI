@@ -82,3 +82,43 @@ player-action-menu:
   mute-confirme-actif: "&a{joueur} est maintenant mute."
   mute-confirme-inactif: "&a{joueur} n'est plus mute."
   mute-subi: "&cUn admin t'a mute."
+
+economy-menu:
+  titre: "&8&lStaffGUI - Économie"
+  gerer-joueur: "&a&lGérer un joueur"
+  gerer-joueur-lore: "&7Voir/give/take/set les Cristaux d'un joueur."
+  reset: "&4&lRéinitialiser l'économie"
+  reset-lore: "&cRemet TOUS les soldes à 0. Irréversible."
+  reset-confirmer: "&4&l⚠ Cliquer à nouveau pour confirmer"
+  reset-confirmer-lore: "&cCette action est définitive."
+  reset-arme: "&eClique une seconde fois dans les 5 secondes pour confirmer."
+  reset-execute: "&a&l✓ &aL'économie du serveur a été réinitialisée."
+  retour: "&7&lMenu précédent"
+  permission-refusee: "&cTu n'as pas la permission pour cette action."
+
+economy-player-list-menu:
+  titre: "&8&lStaffGUI - Économie - Joueurs"
+  retour: "&7&lMenu précédent"
+  joueur-deconnecte: "&cCe joueur s'est déconnecté entre-temps."
+
+economy-action-menu:
+  titre-prefixe: "&8&lStaffGUI - Économie - "
+  solde-lore: "&7Solde actuel : &6{solde} cristaux"
+  retour: "&7&lRetour à la liste"
+  cible-deconnectee: "&cCe joueur s'est déconnecté."
+  permission-refusee: "&cTu n'as pas la permission pour cette action."
+  demande-montant: "&eTape le montant ({action}) pour {joueur} dans le chat."
+  montant-invalide: "&cMontant invalide — tape un nombre entier positif."
+
+  give: "&a&lDonner (give)"
+  give-lore: "&7Ajoute des cristaux au solde actuel."
+  give-confirme: "&a+{montant} cristaux donnés à {joueur}."
+
+  take: "&c&lRetirer (take)"
+  take-lore: "&7Retire des cristaux du solde actuel."
+  take-confirme: "&a-{montant} cristaux retirés à {joueur}."
+  take-solde-insuffisant: "&c{joueur} n'a pas assez de cristaux pour ce retrait."
+
+  set: "&b&lDéfinir (set)"
+  set-lore: "&7Écrase le solde actuel avec cette valeur."
+  set-confirme: "&aSolde de {joueur} défini à {montant} cristaux."

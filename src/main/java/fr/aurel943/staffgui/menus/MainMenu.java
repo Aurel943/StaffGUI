@@ -94,7 +94,7 @@ public class MainMenu implements Listener {
                     messages.send(player, "main-menu.module-indisponible-message");
                     return;
                 }
-                player.sendMessage(colored("&7[StaffGUI] Menu Économie — arrive au Lot 3."));
+                plugin.getEconomyMenu().open(player);
             }
             case SLOT_RANKS -> {
                 if (!plugin.isHubAvailable()) {

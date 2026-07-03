@@ -7,32 +7,34 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import fr.aurel943.staffgui.StaffGUI;
 import fr.aurel943.staffgui.messages.MessagesManager;
 import fr.aurel943.staffgui.moderation.MuteManager;
+import fr.aurel943.staffgui.moderation.PendingEconomyAction;
+import fr.aurel943.staffgui.moderation.PendingEconomyManager;
 import fr.aurel943.staffgui.moderation.PendingKickManager;
 
+import java.util.Map;
 import java.util.UUID;
 
 /**
- * Un seul listener de chat pour deux besoins distincts, dans cet ordre :
- *   1) Si l'expéditeur a un kick "en attente de raison" (a cliqué sur Kick
- *      dans PlayerActionMenu), son prochain message de chat EST la raison
- *      — on l'intercepte, on exécute le kick, et on annule le message pour
- *      qu'il ne parte pas dans le chat public.
- *   2) Sinon, si l'expéditeur est mute, on annule simplement son message.
- *
- * Utilise AsyncPlayerChatEvent (API legacy mais texte brut direct, plus
- * simple ici qu'AsyncChatEvent + Component pour juste lire une raison).
+ * Un seul listener de chat pour trois besoins, vérifiés dans cet ordre :
+ *   1) Kick en attente de raison (Lot 2)
+ *   2) Action économie en attente de montant (Lot 3)
+ *   3) Sinon, si l'expéditeur est mute, on annule son message (Lot 2)
  */
 public class ChatModerationListener implements Listener {
 
     private final StaffGUI plugin;
     private final MuteManager muteManager;
     private final PendingKickManager pendingKickManager;
+    private final PendingEconomyManager pendingEconomyManager;
     private final MessagesManager messages;
 
-    public ChatModerationListener(StaffGUI plugin, MuteManager muteManager, PendingKickManager pendingKickManager) {
+    public ChatModerationListener(StaffGUI plugin, MuteManager muteManager,
+                                  PendingKickManager pendingKickManager,
+                                  PendingEconomyManager pendingEconomyManager) {
         this.plugin = plugin;
         this.muteManager = muteManager;
         this.pendingKickManager = pendingKickManager;
+        this.pendingEconomyManager = pendingEconomyManager;
         this.messages = plugin.getMessagesManager();
     }
 
@@ -43,23 +45,13 @@ public class ChatModerationListener implements Listener {
 
         if (pendingKickManager.hasPending(uuid)) {
             event.setCancelled(true);
-            UUID targetUuid = pendingKickManager.consume(uuid);
-            String reason = event.getMessage();
+            handleKickReason(player, pendingKickManager.consume(uuid), event.getMessage());
+            return;
+        }
 
-            // Exécution du kick sur le thread principal : AsyncPlayerChatEvent
-            // est asynchrone, mais Player#kick() doit être appelé sur le thread
-            // principal du serveur.
-            org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> {
-                Player target = org.bukkit.Bukkit.getPlayer(targetUuid);
-                if (target == null) {
-                    messages.send(player, "player-action-menu.kick.cible-deconnectee");
-                    return;
-                }
-                target.kick(net.kyori.adventure.text.Component.text(
-                        MessagesManager_colored("&c" + reason)));
-                messages.send(player, "player-action-menu.kick.confirme",
-                        java.util.Map.of("joueur", target.getName(), "raison", reason));
-            });
+        if (pendingEconomyManager.hasPending(uuid)) {
+            event.setCancelled(true);
+            handleEconomyAmount(player, pendingEconomyManager.consume(uuid), event.getMessage());
             return;
         }
 
@@ -69,7 +61,60 @@ public class ChatModerationListener implements Listener {
         }
     }
 
-    private static String MessagesManager_colored(String text) {
-        return org.bukkit.ChatColor.translateAlternateColorCodes('&', text);
+    private void handleKickReason(Player admin, UUID targetUuid, String reason) {
+        org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> {
+            Player target = org.bukkit.Bukkit.getPlayer(targetUuid);
+            if (target == null) {
+                messages.send(admin, "player-action-menu.kick.cible-deconnectee");
+                return;
+            }
+            target.kick(net.kyori.adventure.text.Component.text(
+                    org.bukkit.ChatColor.translateAlternateColorCodes('&', "&c" + reason)));
+            messages.send(admin, "player-action-menu.kick.confirme",
+                    Map.of("joueur", target.getName(), "raison", reason));
+        });
+    }
+
+    private void handleEconomyAmount(Player admin, PendingEconomyAction action, String raw) {
+        int montant;
+        try {
+            montant = Integer.parseInt(raw.trim());
+        } catch (NumberFormatException e) {
+            messages.send(admin, "economy-action-menu.montant-invalide");
+            return;
+        }
+        if (montant < 0) {
+            messages.send(admin, "economy-action-menu.montant-invalide");
+            return;
+        }
+
+        org.bukkit.Bukkit.getScheduler().runTask(plugin, () -> {
+            if (!plugin.isHubAvailable()) return;
+            var economy = plugin.getHubPlugin().getEconomyManager();
+            Player target = org.bukkit.Bukkit.getPlayer(action.targetUuid);
+            String nomCible = target != null ? target.getName() : action.targetUuid.toString();
+
+            switch (action.type) {
+                case GIVE -> {
+                    economy.addBalance(action.targetUuid, montant);
+                    messages.send(admin, "economy-action-menu.give-confirme",
+                            Map.of("montant", String.valueOf(montant), "joueur", nomCible));
+                }
+                case TAKE -> {
+                    boolean ok = economy.removeBalance(action.targetUuid, montant);
+                    if (ok) {
+                        messages.send(admin, "economy-action-menu.take-confirme",
+                                Map.of("montant", String.valueOf(montant), "joueur", nomCible));
+                    } else {
+                        messages.send(admin, "economy-action-menu.take-solde-insuffisant", Map.of("joueur", nomCible));
+                    }
+                }
+                case SET -> {
+                    economy.setBalance(action.targetUuid, montant);
+                    messages.send(admin, "economy-action-menu.set-confirme",
+                            Map.of("montant", String.valueOf(montant), "joueur", nomCible));
+                }
+            }
+        });
     }
 }
